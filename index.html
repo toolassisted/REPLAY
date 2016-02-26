@@ -9,6 +9,7 @@
     background-color: #000;
     color: #fff;
     font-family: sans-serif;
+    margin-bottom: 500px;
   }
 
   path {
@@ -45,10 +46,17 @@
   }
 
   #LINKS {
-    height: 500px;
+    /*height: 500px;*/
+    white-space: nowrap;
+    overflow: auto;
   }
 
-  #LINKS div {
+  #LINKS div.COL {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  #LINKS div.COL div {
     text-align: left;
     padding: 10px;
   }
@@ -124,8 +132,8 @@
 </style>
 </head>
 <body>
-<div id="REPLAYS"></div>
 <div id="LINKS"></div>
+<div id="REPLAYS"></div>
 <script src="d3.min.js"></script>
 <script>
 
@@ -259,7 +267,8 @@ function UCREPLAY(data,file) {
     });
 
   var rects = gs.append("rect")
-    .attr("x",function(d,i){return (d-1)*60}).attr("height",height).attr("width","50").attr("fill","#333");
+    .attr("x",function(d,i){return (d-1)*60}).attr("height",height).attr("width","50")
+    .attr("fill",function(d,i){return d<0?"#333":d==0?"#111":"#333"});
 
   var texts = gs.append("text").text(function(d,i){return d;})
     .attr("x",function(d,i){return (d-1)*60+25}).attr("y",height/2+5).attr("height",height).attr("width","50").attr("fill","#333");    
@@ -280,7 +289,7 @@ function UCREPLAY(data,file) {
     if (d3.event.sourceEvent && !fromclick) { // not a programmatic event
       value = Math.floor(x.invert(d3.mouse(this)[0]));
       brush.extent([value, value]);
-      console.log(brush.extent(), d3.event.sourceEvent);
+      //console.log(brush.extent(), d3.event.sourceEvent);
     }
     fromclick = false;
     texts.data(d3.range(value-5,value+6,1)).text(function(d,i){return d;});    
@@ -373,22 +382,51 @@ function UCREPLAY(data,file) {
 }
 
 var JSONS = [
-  "REPLAY_TENKO_OROCHI_INPUT_FIRST",
-  "REPLAY_TENKO_OROCHI_INPUT_LAST",
-  "REPLAY_TENKO_OROCHI_INPUT_LATE_DASH",
-  "REPLAY_TENKO_OROCHI_INPUT_LATE_OROCHI",
-  "REPLAY_RESSENHA_THROW",
-  "REPLAY_AIR_THROW_ODD",
-  "REPLAY_AIR_THROW_EVEN",
-  "REPLAY_THROW_VS_SPD_ODD",
-  "REPLAY_THROW_VS_SPD_EVEN",
-  "REPLAY_ZANGIEF_SPD_ODD",
-  "REPLAY_ZANGIEF_SPD_EVEN",
-  "REPLAY_ZANGIEF_720",
+  [
+  "TENKO_OROCHI_INPUT_FIRST",
+  "TENKO_OROCHI_INPUT_LAST",
+  "TENKO_OROCHI_INPUT_LATE_DASH",
+  "TENKO_OROCHI_INPUT_LATE_OROCHI",
+  "RESSENHA_THROW",
+  "TENKO_JUMP_KD",
+  "TENKO_JUMP_KDR",
+  "TENKO_JUMP_KDBR",
+  ],
+  // [
+  // "ROUND_1",
+  // "ROUND_2",
+  // "ROUND_3",
+  // "TEST",
+  // ],
+  [
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_EARLY",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_FIRST",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_LAST",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_LATE",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_1F_EARLY",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_1F",
+  "TENKO_OROCHI_KICK_TENKO_EX_INPUT_1F_LATE",
+  // ],
+  // [
+  "TENKO_OROCHI_KICK_TENKO_EX_OROCHI_EX_INPUT_FIRST",
+  "TENKO_OROCHI_KICK_TENKO_EX_OROCHI_EX_INPUT_LAST",
+  "TENKO_OROCHI_KICK_TENKO_EX_OROCHI_EX_INPUT_1F",
+  ],
+  [
+  "AIR_THROW_ODD",
+  "AIR_THROW_EVEN",
+  "THROW_VS_SPD_ODD",
+  "THROW_VS_SPD_EVEN",
+  "ZANGIEF_SPD_ODD",
+  "ZANGIEF_SPD_EVEN",
+  "ZANGIEF_720",
+  ],
   ];
 
-d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").append("button").text(function(d){return d;}).on("click",function(d){
-  d3.json(d+".json",function(error,data){
+d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("class","COL")
+.selectAll("div").data(function(d){return d;}).enter().append("div")
+.append("button").text(function(d){return d;}).on("click",function(d){
+  d3.json("REPLAY_"+d+".json",function(error,data){
     if (error) return;
     UCREPLAY(data,d);
   });
