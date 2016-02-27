@@ -292,7 +292,22 @@ function UCREPLAY(data,file) {
       //console.log(brush.extent(), d3.event.sourceEvent);
     }
     fromclick = false;
-    texts.data(d3.range(value-5,value+6,1)).text(function(d,i){return d;});    
+    var fr = d3.range(value-5,value+6,1);
+    texts.data(fr).text(function(d,i){return d;});
+    rects.data(fr).attr("fill",function(d,i){
+      if (d==value) {        
+        if (d >= 0 && d < frames.length) {
+          if (frames[d].p[0].hits.length > 0 || frames[d].p[1].hits.length > 0) return "#311";
+          if (frames[d].i1 > 0 || frames[d].i2 > 0) return "#331";
+        }
+        return "#111";
+      }
+      if (d >= 0 && d < frames.length) {
+        if (frames[d].p[0].hits.length > 0 || frames[d].p[1].hits.length > 0) return "#533";
+        if (frames[d].i1 > 0 || frames[d].i2 > 0) return "#553";
+      }
+      return "#333";
+    });
 
     handle.attr("cx", x(value));
 
@@ -303,7 +318,6 @@ function UCREPLAY(data,file) {
       var frame = frames[f];
 
       var dg = rg;
-      var rects = [];
       dg.selectAll("*").remove();
 
       dg.append("text")
@@ -416,6 +430,8 @@ var JSONS = [
   "ZANGIEF_SPD_ODD",
   "ZANGIEF_SPD_EVEN",
   "ZANGIEF_720",
+  ],
+  [
   "KARIN_VS_LAURA_ROUND_1",
   "KARIN_VS_LAURA_ROUND_2",
   "KARIN_VS_LAURA_ROUND_3",
