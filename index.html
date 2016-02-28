@@ -41,6 +41,8 @@
   .p2hit { stroke: #c6f; }
   .p2cyan { stroke: #6ff; }
 
+  .hit { color: #f99; }
+
   #REPLAYS {
     text-align: center;
   }
@@ -49,6 +51,32 @@
     /*height: 500px;*/
     white-space: nowrap;
     overflow: auto;
+  }
+
+  #FRAMES {
+    /*height: 500px;*/
+    white-space: nowrap;
+    overflow: auto;
+  }
+
+  #FRAMES div {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  #FRAMES div table {
+    table-layout: fixed;
+    font: 10px sans-serif;
+    text-align: center;
+    color: #ccc;
+  }
+
+  #FRAMES div tr:nth-child(even) {
+    background-color: #333; 
+  }
+
+  #FRAMES div tr:nth-child(odd) {
+    background-color: #111; 
   }
 
   #LINKS div.COL {
@@ -135,6 +163,7 @@
 <body>
 <div id="LINKS"></div>
 <div id="REPLAYS"></div>
+<div id="FRAMES"></div>
 <script src="d3.min.js"></script>
 <script>
 
@@ -159,11 +188,34 @@ function UCINPUT(input) {
 
 
 var REPLAYS = d3.select("#REPLAYS");
+var FRAMES = d3.select("#FRAMES");
 
 function UCREPLAY(data,file) {
   
   var frames = data;  
   //REPLAY1.datum(frames);
+
+
+  var FRAMETABLE = FRAMES.append("div").append("table")
+
+  FRAMETABLE.append("tr").append("th").attr("colspan",5).text(file);
+
+  var TH = FRAMETABLE.append("tr");
+  TH.append("th").text("F");
+  TH.append("th").text("P1");
+  TH.append("th").text("P1 SCRIPT");
+  TH.append("th").text("P2 SCRIPT");
+  TH.append("th").text("P2");
+
+  
+  for (var f=0;f<frames.length;f++) {
+    var TR = FRAMETABLE.append("tr");
+    TR.append("td").text(f);
+    TR.append("td").text(UCINPUT(frames[f].i1));
+    TR.append("td").text(frames[f].p[0].s).classed("hit",frames[f].p[0].hits.length>0);
+    TR.append("td").text(frames[f].p[1].s).classed("hit",frames[f].p[1].hits.length>0);
+    TR.append("td").text(UCINPUT(frames[f].i2));
+  }
 
   var afc = [];
   var sl = 0;
@@ -176,7 +228,7 @@ function UCREPLAY(data,file) {
     if (sc!=sl) { if(sl>0) afc.push([fl,f,sl]); fl=f;}
     sl=sc;
   }
-  console.log(afc);
+  // console.log(afc);
   // var threshold = d3.scale.threshold().domain(af).range(ac);
 
   var margin = {top: 440, right: 50, bottom: 20, left: 50},
