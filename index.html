@@ -41,7 +41,10 @@
   .p2hit { stroke: #c6f; }
   .p2cyan { stroke: #6ff; }
 
-  .hit { color: #f99; }
+  .hitbox { color: #f99; }
+  .hit { color: #969; }
+  .first { color: #cfc; background-color: #363;}
+  .iasa1 { color: #999;}
 
   #REPLAYS {
     text-align: center;
@@ -210,11 +213,26 @@ function UCREPLAY(data,file) {
   
   for (var f=0;f<frames.length;f++) {
     var TR = FRAMETABLE.append("tr");
-    TR.append("td").text(f);
-    TR.append("td").text(UCINPUT(frames[f].i1));
-    TR.append("td").text(frames[f].p[0].s).classed("hit",frames[f].p[0].hits.length>0);
-    TR.append("td").text(frames[f].p[1].s).classed("hit",frames[f].p[1].hits.length>0);
-    TR.append("td").text(UCINPUT(frames[f].i2));
+    TR.append("td").text(f).datum(f).on("click",function(d,i){
+      d3.select(this).text(d + "." + 1).classed("first",true);
+      var r = this.parentNode; 
+      var rc = 2;
+      while (r.nextSibling != null) {
+        r = r.nextSibling;
+        d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+      }
+    });
+    var p1c = "";
+    var p2c = "";
+
+    if (typeof(frames[f].p[1].c) !== 'undefined' && frames[f].p[1].c != null) {
+      p2c = " " + frames[f].p[1].c.dt + "." + frames[f].p[1].c.st;
+    }
+
+    TR.append("td").text(UCINPUT(frames[f].i1 + p1c));
+    TR.append("td").text(frames[f].p[0].s).classed("hitbox",frames[f].p[0].hits.length>0).classed("hit",frames[f].p[0].hit>0).classed("iasa1",frames[f].p[0].s.slice(-1)=="+");
+    TR.append("td").text(frames[f].p[1].s).classed("hitbox",frames[f].p[1].hits.length>0).classed("hit",frames[f].p[1].hit>0).classed("iasa1",frames[f].p[1].s.slice(-1)=="+");;
+    TR.append("td").text(UCINPUT(frames[f].i2) + p2c);
   }
 
   var afc = [];
@@ -480,6 +498,9 @@ var JSONS = [
   "TENKO_KICK_TENKO_EX_OROCHI_EX_INPUT_FIRST",
   "TENKO_KICK_TENKO_EX_OROCHI_EX_INPUT_LAST",
   "TENKO_KICK_TENKO_EX_OROCHI_EX_INPUT_1F",
+  "TENKO_TENKO_EX_DASH_RESSENHA_EX_KD",
+  "TENKO_TENKO_EX_DASH_RESSENHA_EX_KDR",
+  "TENKO_TENKO_EX_DASH_RESSENHA_EX_KDBR",
   ],
   [
   "AIR_THROW_ODD",
