@@ -429,6 +429,9 @@ function UCREPLAY(data,file) {
       dg.append("path").attr("id", "fpath")
         .attr("d", d3.svg.line()([[-2,0],[2,0]].map(function(p){return [p[0],p[1]];})) + "Z");
 
+      var xoff = 0;
+      if (frame.p[0].x1 > 4 && frame.p[1].x1 > 4) xoff = -5;
+      if (frame.p[0].x1 < -4 && frame.p[1].x1 < -4) xoff = +5;
 
       for (var p=0;p<2;p++) {
 
@@ -436,21 +439,21 @@ function UCREPLAY(data,file) {
 
         dg.selectAll("rect.clips").data(fp.clips).enter().append("rect")
           .attr("class", "clip")
-          .attr("x", function(d) { return +d.rx; })
+          .attr("x", function(d) { return +d.rx+xoff; })
           .attr("y", function(d) { return -d.ry-d.rh; })
           .attr("height", function(d) { return +d.rh; })
           .attr("width", function(d) { return +d.rw; });
 
         dg.selectAll("rect.grabs").data(fp.grabs).enter().append("rect")
           .attr("class", "p" + (p+1) + "cyan")
-          .attr("x", function(d) { return +d.rx; })
+          .attr("x", function(d) { return +d.rx+xoff; })
           .attr("y", function(d) { return -d.ry-d.rh; })
           .attr("height", function(d) { return +d.rh; })
           .attr("width", function(d) { return +d.rw; });
 
         dg.selectAll("rect.hurts").data(fp.hurts).enter().append("rect")
           .attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"))
-          .attr("x", function(d) { return +d.rx; })
+          .attr("x", function(d) { return +d.rx+xoff; })
           .attr("y", function(d) { return -d.ry-d.rh; })
           .attr("height", function(d) { return +d.rh; })
           .attr("width", function(d) { return +d.rw; });
@@ -458,7 +461,7 @@ function UCREPLAY(data,file) {
 
         dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
           .attr("class", "p" + (p+1) + "red")
-          .attr("x", function(d) { return +d.rx; })
+          .attr("x", function(d) { return +d.rx+xoff; })
           .attr("y", function(d) { return -d.ry-d.rh; })
           .attr("height", function(d) { return +d.rh; })
           .attr("width", function(d) { return +d.rw; });
@@ -523,6 +526,8 @@ var JSONS = [
   "MBISON_HEADSTOMP_EX_VT",
   "WAKEUP_THROW_2F",
   "WAKEUP_THROW_3F",
+  "NECALLI_S_HK_VS_WAKEUP_JAB_KDR",
+  "NECALLI_S_HK_VS_WAKEUP_JAB_KDBR",
   ],
   ];
 
