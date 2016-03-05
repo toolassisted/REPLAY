@@ -402,13 +402,13 @@ function UCREPLAY(data,file) {
         .attr("text-anchor","middle")
         .attr("transform", "translate(0,0.2)scale(0.015)");
 
-      dg.append("text")
+      var t1 = dg.append("text")
         .text(frame.p[0].s)
         .attr("fill","#999")
         .attr("text-anchor","middle")
         .attr("transform", "translate(-2,0.2)scale(0.015)");
 
-      dg.append("text")
+      var t2 = dg.append("text")
         .text(frame.p[1].s)
         .attr("fill","#999")
         .attr("text-anchor","middle")
@@ -436,6 +436,9 @@ function UCREPLAY(data,file) {
       for (var p=0;p<2;p++) {
 
         var fp = frame.p[p];
+        var pp = null;
+        if (p==0 && typeof(frame.p1) !== 'undefined') { pp=frame.p1; }
+        if (p==1 && typeof(frame.p2) !== 'undefined') { pp=frame.p2; }
 
         dg.selectAll("rect.clips").data(fp.clips).enter().append("rect")
           .attr("class", "clip")
@@ -465,6 +468,19 @@ function UCREPLAY(data,file) {
           .attr("y", function(d) { return -d.ry-d.rh; })
           .attr("height", function(d) { return +d.rh; })
           .attr("width", function(d) { return +d.rw; });
+
+        if (pp != null) {
+          for (var pi=0;pi<pp.length;pi++) {
+            if (p==0) { t1.text(t1.text() + " . " + pp[pi].s); }
+            if (p==1) { t2.text(t2.text() + " . " + pp[pi].s); }
+            dg.selectAll("rect.phits").data(pp[pi].hits).enter().append("rect")
+              .attr("class", "p" + (p+1) + "red")
+              .attr("x", function(d) { return +d.rx+xoff; })
+              .attr("y", function(d) { return -d.ry-d.rh; })
+              .attr("height", function(d) { return +d.rh; })
+              .attr("width", function(d) { return +d.rw; });
+          }
+        }
 
       }
 
