@@ -206,9 +206,36 @@ function UCREPLAY(data,file) {
   var TH = FRAMETABLE.append("tr");
   TH.append("th").text("F");
   TH.append("th").text("P1");
-  TH.append("th").text("P1 SCRIPT");
-  TH.append("th").text("P2 SCRIPT");
-  TH.append("th").text("P2");
+  TH.append("th").text("P1 SCRIPT").on("click",function(d,i){
+      var r = this.parentNode;      
+      d3.select(r.children[3]).style("display","");
+      d3.select(r.children[4]).style("display","");
+      
+      var rc = 2;
+      while (r.nextSibling != null) {
+        r = r.nextSibling;
+        d3.select(r.children[3]).style("display","");
+        d3.select(r.children[4]).style("display","");
+      }
+    });
+  TH.append("th").text("P2 SCRIPT").on("click",function(d,i){
+      d3.select(this).style("display","none");
+      var r = this.parentNode; 
+      var rc = 2;
+      while (r.nextSibling != null) {
+        r = r.nextSibling;
+        d3.select(r.children[3]).style("display","none");
+      }
+    });
+  TH.append("th").text("P2").on("click",function(d,i){
+      d3.select(this).style("display","none");
+      var r = this.parentNode; 
+      var rc = 2;
+      while (r.nextSibling != null) {
+        r = r.nextSibling;
+        d3.select(r.children[4]).style("display","none");
+      }
+    });;
 
   
   for (var f=0;f<frames.length;f++) {
@@ -496,6 +523,10 @@ var JSONS = [
   "TENKO_OROCHI_INPUT_LAST",
   "TENKO_OROCHI_INPUT_LATE_DASH",
   "TENKO_OROCHI_INPUT_LATE_OROCHI",
+  "TENKO_OROCHI_INPUT_D_LP",
+  "TENKO_OROCHI_INPUT_D_LP_IASA",
+  "TENKO_OROCHI_INPUT_D_MK",
+  "TENKO_OROCHI_INPUT_D_MK_IASA",
   "RESSENHA_THROW",
   "TENKO_JUMP_KD",
   "TENKO_JUMP_KDR",
