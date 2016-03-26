@@ -319,12 +319,19 @@ function UCREPLAY(data,file) {
                 .attr("height", height + margin.top + margin.bottom);
 
   var title = REPLAY1.append("text")
-                .text(file)
+                .text(file).classed("TITLE",true)
                 .attr("fill","#999")
                 //.attr("text-anchor","middle")
                 .attr("font-size","10px")
                 .attr("font-family","sans-serif")
-                .attr("transform", "translate(20,20)");
+                .attr("transform", "translate(20,20)")
+                .on("click",function() {
+                  window.location.hash="#"+file;
+                });
+
+  var sg = REPLAY1.append("g")
+    .attr("class", "big REPLAY")
+    .attr("transform", "translate(450,350)scale(100)");
 
   var rg = REPLAY1.append("g")
     .attr("class", "big REPLAY")
@@ -400,6 +407,33 @@ function UCREPLAY(data,file) {
   var texts = gs.append("text").text(function(d,i){return d;})
     .attr("x",function(d,i){return (d-1)*60+25}).attr("y",height/2+5).attr("height",height).attr("width","50").attr("fill","#333");    
 
+  var topsvg = REPLAYS.select("svg");
+
+  if (topsvg.node() != REPLAY1.node()) {
+    var ups = focus.append("g")
+      .on("click",function(d,i){
+          var topsvg = REPLAYS.select("svg");
+          var titles = topsvg.selectAll(".TITLE").size();
+          console.log(titles);
+          topsvg.attr("height", 500+titles*150);
+          title.attr("transform","translate(20," + (20 + 20 * titles) + ")");
+          topsvg.node().appendChild(title.node());
+          topsvg.node().appendChild(rg.node());
+          var me = topsvg.append("g").attr("transform","translate(0," + 150*titles +")");
+          me.node().appendChild(sg.node());
+          me.node().appendChild(svg2.node());
+          me.node().appendChild(svg.node());
+          REPLAY1.remove();
+          ups.remove();
+      });
+
+    var upr = ups.append("rect")
+      .attr("x",function(d,i){return (6)*60}).attr("height",height).attr("width","50")
+      .attr("fill","#333");
+
+    var upt = ups.append("text").text("UP")
+      .attr("x",function(d,i){return (6)*60+25}).attr("y",height/2+5).attr("height",height/2+5).attr("width","50").attr("fill","#333");
+  }
 
   slider
     .call(brush.event)
@@ -444,7 +478,7 @@ function UCREPLAY(data,file) {
 
       var frame = frames[f];
 
-      var dg = rg;
+      var dg = sg;
       dg.selectAll("*").remove();
 
       dg.append("text")
@@ -479,6 +513,9 @@ function UCREPLAY(data,file) {
 
       dg.append("path").attr("id", "fpath")
         .attr("d", d3.svg.line()([[-2,0],[2,0]].map(function(p){return [p[0],p[1]];})) + "Z");
+
+      dg = rg;
+      dg.selectAll("*").remove();
 
       var xoff = 0;
       if (frame.p[0].x1 > 4 && frame.p[1].x1 > 4) xoff = -5;
@@ -665,8 +702,7 @@ d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("cla
 .append("button").text(function(d){return d;}).on("click",function(d){
   d3.json("REPLAY_"+d+".json",function(error,data){
     if (error) return;
-    UCREPLAY(data,d);
-    window.location.hash="#"+d;
+    UCREPLAY(data,d);    
   });
 })
 
