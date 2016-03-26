@@ -19,6 +19,9 @@
     vector-effect: non-scaling-stroke;
   }
 
+
+  .fred { fill: #c00 !important; }
+
   .gray { stroke: #333; }
   .red { stroke: #f00; }
   .green { stroke: #0f0; }
@@ -48,6 +51,19 @@
 
   #REPLAYS {
     text-align: center;
+    /*display: inline-block;*/
+  }
+
+  #REPLAYS  !svg + div {
+    /*display: inline-block;*/
+  }
+
+  #REPLAYS div {
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: inline-block;
+    padding-right: 2em;
   }
 
   #LINKS {
@@ -57,9 +73,12 @@
   }
 
   #FRAMES {
-    /*height: 500px;*/
     white-space: nowrap;
-    /*overflow: auto;*/
+    /*height: 500px;*/
+    /*overflow-x: hidden;*/
+    /*overflow-y: auto;*/
+    /*display: inline-block;*/
+    /*padding-right: 2em;*/
   }
 
   #FRAMES div {
@@ -67,19 +86,22 @@
     vertical-align: top;
   }
 
-  #FRAMES div table {
+  table.FRAMES {
     table-layout: fixed;
     font: 10px sans-serif;
     text-align: center;
     color: #ccc;
   }
 
-  #FRAMES div tr:nth-child(even) {
+  table.FRAMES tr:nth-child(even) {
     background-color: #333; 
   }
 
-  #FRAMES div tr:nth-child(odd) {
+  table.FRAMES tr:nth-child(odd) {
     background-color: #111; 
+  }
+  table.FRAMES td {
+    white-space: nowrap;
   }
 
   #LINKS div.COL {
@@ -199,7 +221,9 @@ function UCREPLAY(data,file) {
   //REPLAY1.datum(frames);
 
 
-  var FRAMETABLE = FRAMES.append("div").append("table")
+  var FRAMETABLE = //REPLAYS
+                   FRAMES
+                    .append("div").append("table").classed("FRAMES",true);
 
   FRAMETABLE.append("tr").append("th").attr("colspan",5).text(file);
 
@@ -235,7 +259,7 @@ function UCREPLAY(data,file) {
         r = r.nextSibling;
         d3.select(r.children[4]).style("display","none");
       }
-    });;
+    });
 
   
   for (var f=0;f<frames.length;f++) {
@@ -460,60 +484,79 @@ function UCREPLAY(data,file) {
       if (frame.p[0].x1 > 4 && frame.p[1].x1 > 4) xoff = -5;
       if (frame.p[0].x1 < -4 && frame.p[1].x1 < -4) xoff = +5;
 
-      for (var p=0;p<2;p++) {
+      // for (var ff=f-10;ff<=f;ff++) {
 
-        var fp = frame.p[p];
-        var pp = null;
-        if (p==0 && typeof(frame.p1) !== 'undefined') { pp=frame.p1; }
-        if (p==1 && typeof(frame.p2) !== 'undefined') { pp=frame.p2; }
+      //   if (ff<0) continue;
 
-        dg.selectAll("rect.clips").data(fp.clips).enter().append("rect")
-          .attr("class", "clip")
-          .attr("x", function(d) { return +d.rx+xoff; })
-          .attr("y", function(d) { return -d.ry-d.rh; })
-          .attr("height", function(d) { return +d.rh; })
-          .attr("width", function(d) { return +d.rw; });
+      //   frame = frames[ff];
 
-        dg.selectAll("rect.grabs").data(fp.grabs).enter().append("rect")
-          .attr("class", "p" + (p+1) + "cyan")
-          .attr("x", function(d) { return +d.rx+xoff; })
-          .attr("y", function(d) { return -d.ry-d.rh; })
-          .attr("height", function(d) { return +d.rh; })
-          .attr("width", function(d) { return +d.rw; });
+        for (var p=0;p<2;p++) {
 
-        dg.selectAll("rect.hurts").data(fp.hurts).enter().append("rect")
-          .attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"))
-          .attr("x", function(d) { return +d.rx+xoff; })
-          .attr("y", function(d) { return -d.ry-d.rh; })
-          .attr("height", function(d) { return +d.rh; })
-          .attr("width", function(d) { return +d.rw; });
+          var fp = frame.p[p];
+          var pp = null;
+          if (p==0 && typeof(frame.p1) !== 'undefined') { pp=frame.p1; }
+          if (p==1 && typeof(frame.p2) !== 'undefined') { pp=frame.p2; }
+
+          // if (ff==f)
+          dg.selectAll("rect.clips").data(fp.clips).enter().append("rect")
+            .attr("class", "clip")
+            .attr("x", function(d) { return +d.rx+xoff; })
+            .attr("y", function(d) { return -d.ry-d.rh; })
+            .attr("height", function(d) { return +d.rh; })
+            .attr("width", function(d) { return +d.rw; });
+
+          // if (ff==f)
+          dg.selectAll("rect.grabs").data(fp.grabs).enter().append("rect")
+            .attr("class", "p" + (p+1) + "cyan")
+            .attr("x", function(d) { return +d.rx+xoff; })
+            .attr("y", function(d) { return -d.ry-d.rh; })
+            .attr("height", function(d) { return +d.rh; })
+            .attr("width", function(d) { return +d.rw; });
+
+          // if (ff==f)
+          dg.selectAll("rect.hurts").data(fp.hurts).enter().append("rect")
+            .attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"))
+            .attr("x", function(d) { return +d.rx+xoff; })
+            .attr("y", function(d) { return -d.ry-d.rh; })
+            .attr("height", function(d) { return +d.rh; })
+            .attr("width", function(d) { return +d.rw; });
 
 
-        dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
-          .attr("class", "p" + (p+1) + "red")
-          .attr("x", function(d) { return +d.rx+xoff; })
-          .attr("y", function(d) { return -d.ry-d.rh; })
-          .attr("height", function(d) { return +d.rh; })
-          .attr("width", function(d) { return +d.rw; });
+          // if (ff==f)
+          // dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
+          //   .attr("class", "p" + (p+1) + "red").classed("fred", true)
+          //   .attr("x", function(d) { return +d.rx+xoff; })
+          //   .attr("y", function(d) { return -d.ry-d.rh; })
+          //   .attr("height", function(d) { return +d.rh; })
+          //   .attr("width", function(d) { return +d.rw; });
+          // else          
+          dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
+            .attr("class", "p" + (p+1) + "red")
+            .attr("x", function(d) { return +d.rx+xoff; })
+            .attr("y", function(d) { return -d.ry-d.rh; })
+            .attr("height", function(d) { return +d.rh; })
+            .attr("width", function(d) { return +d.rw; });
 
-        if (pp != null) {
-          for (var pi=0;pi<pp.length;pi++) {
-            if (p==0) { t1.text(t1.text() + " . " + pp[pi].s); }
-            if (p==1) { t2.text(t2.text() + " . " + pp[pi].s); }
-            dg.selectAll("rect.phits").data(pp[pi].hits).enter().append("rect")
-              .attr("class", "p" + (p+1) + "red")
-              .attr("x", function(d) { return +d.rx+xoff; })
-              .attr("y", function(d) { return -d.ry-d.rh; })
-              .attr("height", function(d) { return +d.rh; })
-              .attr("width", function(d) { return +d.rw; });
+          if (pp != null) {
+            for (var pi=0;pi<pp.length;pi++) {
+              if (p==0) { t1.text(t1.text() + " . " + pp[pi].s); }
+              if (p==1) { t2.text(t2.text() + " . " + pp[pi].s); }
+              dg.selectAll("rect.phits").data(pp[pi].hits).enter().append("rect")
+                .attr("class", "p" + (p+1) + "red")
+                .attr("x", function(d) { return +d.rx+xoff; })
+                .attr("y", function(d) { return -d.ry-d.rh; })
+                .attr("height", function(d) { return +d.rh; })
+                .attr("width", function(d) { return +d.rw; });
+            }
           }
-        }
 
-      }
+        }
+      // }
 
     }
 
   }
+
 
 }
 
@@ -618,12 +661,28 @@ d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("cla
   d3.json("REPLAY_"+d+".json",function(error,data){
     if (error) return;
     UCREPLAY(data,d);
+    window.location.hash="#"+d;
   });
 })
 
 //d3.json("REPLAY_TENKO_OROCHI.json",UCREPLAY);
 //d3.json("REPLAY_TENKO_OROCHI_LATE.json",UCREPLAY);
+var d = window.location.hash.substr(1).replace(/\.json/g,"").replace(/REPLAY_/g,"").replace(/[^_A-Za-z0-9]/g,"");;
+if (d!="") {
 
+  function scrollTopTween(scrollTop) {
+    return function() {
+      var i = d3.interpolateNumber(window.scrollTop, scrollTop);
+      return function(t) { window.scrollTop = i(t); };
+   };
+  }
+
+  d3.json("REPLAY_"+d+".json",function(error,data){
+    if (error) return;
+    UCREPLAY(data,d);  
+    d3.select("#REPLAYS").node().scrollIntoView();           
+  });
+}
 
 </script>
 <script>
