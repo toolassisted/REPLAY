@@ -623,6 +623,8 @@ var JSONS = [
   "RESET_LAND_D_HOLD",
   "RESET_LAND_U_HOLD",
   "RESET_LAND_B_HOLD",
+  "TENKO_EX_FIRST",
+  "TENKO_EX_LAST",
   ],
   // [
 
@@ -711,21 +713,33 @@ d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("cla
 
 //d3.json("REPLAY_TENKO_OROCHI.json",UCREPLAY);
 //d3.json("REPLAY_TENKO_OROCHI_LATE.json",UCREPLAY);
-var d = window.location.hash.substr(1).replace(/\.json/g,"").replace(/REPLAY_/g,"").replace(/[^_A-Za-z0-9]/g,"");;
+var rs = window.location.hash.substr(1).split("/");
+var nd = rs.shift();
+var d = nd.replace(/\.json/g,"").replace(/REPLAY_/g,"").replace(/[^_A-Za-z0-9]/g,"");
 if (d!="") {
-
-  function scrollTopTween(scrollTop) {
-    return function() {
-      var i = d3.interpolateNumber(window.scrollTop, scrollTop);
-      return function(t) { window.scrollTop = i(t); };
-   };
-  }
-
   d3.json("REPLAY_"+d+".json",function(error,data){
     if (error) return;
     UCREPLAY(data,d);  
-    d3.select("#REPLAYS").node().scrollIntoView();           
+    d3.select("#REPLAYS").node().scrollIntoView();
+    if (rs.length>0) {
+      var nd = rs.shift();
+      ULOADREPLAY(nd);
+    }
   });
+
+  function ULOADREPLAY(replay) {
+    var d = replay.replace(/\.json/g,"").replace(/REPLAY_/g,"").replace(/[^_A-Za-z0-9]/g,"");
+    if (d!="") {
+      d3.json("REPLAY_"+d+".json",function(error,data){
+        if (error) return;
+        UCREPLAY(data,d);
+        if (rs.length>0) {
+          var nd = rs.shift();
+          ULOADREPLAY(nd);
+        }
+      });
+    }
+  }
 }
 
 </script>
