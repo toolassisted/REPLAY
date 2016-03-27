@@ -356,6 +356,41 @@ function UCREPLAY(data,file) {
     .attr("class", "big REPLAY STAGE")
     .attr("transform", "translate(450,350)scale(100)");
 
+      var tf = sg.append("text")
+        //.text(f)
+        .attr("fill","#999")
+        .attr("text-anchor","middle")
+        .attr("transform", "translate(0,0.2)scale(0.015)");
+
+      var t1 = sg.append("text")
+        // .text(frame.p[0].s)
+        .attr("fill","#999")
+        .attr("text-anchor","middle")
+        .attr("transform", "translate(-2,0.2)scale(0.015)")
+        .on("click", function() { var pg = rg.select(".P1"); pg.classed("UNOC",!pg.classed("UNOC"));} );
+
+      var t2 = sg.append("text")
+        // .text(frame.p[1].s)
+        .attr("fill","#999")
+        .attr("text-anchor","middle")
+        .attr("transform", "translate(2,0.2)scale(0.015)")
+        .on("click", function() { var pg = rg.select(".P2"); pg.classed("UNOC",!pg.classed("UNOC"));} );
+
+      var t1i = sg.append("text")
+        // .text(UCINPUT(frame.i1))
+        .attr("fill","#999")
+        .attr("text-anchor","middle")
+        .attr("transform", "translate(-2,0.4)scale(0.015)");
+
+      var t2i = sg.append("text")
+        // .text(UCINPUT(frame.i2))
+        .attr("fill","#999")
+        .attr("text-anchor","middle")
+        .attr("transform", "translate(2,0.4)scale(0.015)");
+
+      sg.append("path").attr("id", "fpath")
+        .attr("d", d3.svg.line()([[-2,0],[2,0]].map(function(p){return [p[0],p[1]];})) + "Z");
+
   var rg = REPLAY1.append("g")
     .attr("class", "big REPLAY BOX")
     .attr("transform", "translate(450,350)scale(100)");
@@ -411,6 +446,11 @@ function UCREPLAY(data,file) {
       
         if (d==0) {
           gg.classed("UNOC",!gg.classed("UNOC"));
+          //console.log(gg.node());
+          if (gg.node().parentNode.parentNode==null) {
+            rg.classed("UNOC",rg.classed("UNOC"));
+            tf.classed("UNOC",tf.classed("UNOC"));
+          }
           return;
         }
         var value = Math.floor(brush.extent()[0])+d;
@@ -507,44 +547,13 @@ function UCREPLAY(data,file) {
 
       var frame = frames[f];
 
-      var dg = sg;
-      dg.selectAll("*").remove();
+      tf.text(f);
+      t1.text(frame.p[0].s);
+      t2.text(frame.p[1].s);
+      t1i.text(UCINPUT(frame.i1));
+      t2i.text(UCINPUT(frame.i2));
 
-      dg.append("text")
-        .text(f)
-        .attr("fill","#999")
-        .attr("text-anchor","middle")
-        .attr("transform", "translate(0,0.2)scale(0.015)");
-
-      var t1 = dg.append("text")
-        .text(frame.p[0].s)
-        .attr("fill","#999")
-        .attr("text-anchor","middle")
-        .attr("transform", "translate(-2,0.2)scale(0.015)");
-
-      var t2 = dg.append("text")
-        .text(frame.p[1].s)
-        .attr("fill","#999")
-        .attr("text-anchor","middle")
-        .attr("transform", "translate(2,0.2)scale(0.015)");
-
-      dg.append("text")
-        .text(UCINPUT(frame.i1))
-        .attr("fill","#999")
-        .attr("text-anchor","middle")
-        .attr("transform", "translate(-2,0.4)scale(0.015)");
-
-      dg.append("text")
-        .text(UCINPUT(frame.i2))
-        .attr("fill","#999")
-        .attr("text-anchor","middle")
-        .attr("transform", "translate(2,0.4)scale(0.015)");
-
-      dg.append("path").attr("id", "fpath")
-        .attr("d", d3.svg.line()([[-2,0],[2,0]].map(function(p){return [p[0],p[1]];})) + "Z");
-
-      dg = rg;
-      dg.selectAll("*").remove();
+      rg.selectAll("*").remove();
 
       var xoff = 0;
       if (frame.p[0].x1 > 4 && frame.p[1].x1 > 4) xoff = -5;
@@ -562,6 +571,8 @@ function UCREPLAY(data,file) {
           var pp = null;
           if (p==0 && typeof(frame.p1) !== 'undefined') { pp=frame.p1; }
           if (p==1 && typeof(frame.p2) !== 'undefined') { pp=frame.p2; }
+
+          var dg = rg.append("g").attr("class","PLAYER P"+(p+1));
 
           // if (ff==f)
           dg.selectAll("rect.clips").data(fp.clips).enter().append("rect")
@@ -644,13 +655,16 @@ var JSONS = [
   "KARIN_VR_KD",
   "KARIN_VR_KDR",
   "KARIN_VR_KDBR",
-  "RESET_LAND",
-  "RESET_LAND_D_5F",
-  "RESET_LAND_D_HOLD",
-  "RESET_LAND_U_HOLD",
-  "RESET_LAND_B_HOLD",
   "TENKO_EX_FIRST",
   "TENKO_EX_LAST",
+  "CH_HK_TENKO_EX_2F",
+  "CH_HK_TENKO_EX_3F",
+  "CH_HK_TENKO_EX_4F",
+  "CH_HK_TENKO_EX_5F",
+  "CH_HK_TENKO_EX_6F",
+  "CH_HK_TENKO_EX_7F",
+  "CH_HK_TENKO_EX_8F",
+  "CH_HK_TENKO_EX_9F_MAX",
   ],
   // [
 
@@ -677,6 +691,11 @@ var JSONS = [
   "THROW_VS_RESET_FRAME_1_2",
   "THROW_VS_RESET_FRAME_3_4",
   "THROW_VS_RESET_LAND_CR_LP",
+  "RESET_LAND",
+  "RESET_LAND_D_5F",
+  "RESET_LAND_D_HOLD",
+  "RESET_LAND_U_HOLD",
+  "RESET_LAND_B_HOLD",
   ],
   [
   "AIR_THROW_ODD",
@@ -725,8 +744,7 @@ var JSONS = [
   "CHUNLI_AIRLEG_MK",
   "CHUNLI_AIRLEG_HK",
   "CHUNLI_AIRLEG_EX",
-  ],
-  ];
+  ],  ];
 
 d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("class","COL")
 .selectAll("div").data(function(d){return d;}).enter().append("div")
