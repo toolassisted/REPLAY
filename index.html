@@ -22,6 +22,10 @@
   .GRID line {
     vector-effect: non-scaling-stroke;
   }
+  
+  .REPLAY line {
+    vector-effect: non-scaling-stroke;
+  }
 
   .UNOC { display: none; }
 
@@ -349,7 +353,11 @@ function UCREPLAY(data,file) {
                 .attr("font-family","sans-serif")
                 .attr("transform", "translate(20,20)")
                 .on("click",function() {
-                  window.location.hash="#"+file;
+                  if (d3.event.ctrlKey) {
+                    window.location.hash+="/"+file;
+                  } else {
+                    window.location.hash="#"+file;
+                  }
                 });
 
   var sg = REPLAY1.append("g")
@@ -598,6 +606,8 @@ function UCREPLAY(data,file) {
             .attr("height", function(d) { return +d.rh; })
             .attr("width", function(d) { return +d.rw; });
 
+          dg.append("line").attr("x1",fp.x2).attr("x2",fp.x2).attr("y1",0.1).attr("y2",0).attr("stroke-width","1").attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"));
+
 
           // if (ff==f)
           // dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
@@ -708,6 +718,7 @@ var JSONS = [
   "ZANGIEF_720",
   "THROW_TECH_ODD",
   "THROW_TECH_EVEN",
+  "THROW_TECH_LAST",
   "CAMMY_CA_HIT",
   "CAMMY_CA_MISS",
   "RYU_VT_1F_INV",
@@ -754,8 +765,9 @@ d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("cla
 .append("button").text(function(d){return d;}).on("click",function(d){
   d3.json("REPLAY_"+d+".json",function(error,data){
     if (error) return;
-    UCREPLAY(data,d);    
+    UCREPLAY(data,d);
   });
+  if (d3.event.ctrlKey && window.location.hash.startsWith("#")) window.location.hash+="/"+d;
 })
 
 //d3.json("REPLAY_TENKO_OROCHI.json",UCREPLAY);
