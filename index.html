@@ -22,7 +22,7 @@
   .GRID line {
     vector-effect: non-scaling-stroke;
   }
-  
+
   .REPLAY line {
     vector-effect: non-scaling-stroke;
   }
@@ -698,15 +698,16 @@ var JSONS = [
   "KARIN_STAND_VS_CAMMY_DIVE_EX_LOW",
   "KARIN_CROUCH_VS_CAMMY_DIVE_EX",
   "KARIN_WALK_VS_CAMMY_DIVE_EX",
-  "THROW_VS_JUMP_LAND",
-  "THROW_VS_RESET_FRAME_1_2",
-  "THROW_VS_RESET_FRAME_3_4",
-  "THROW_VS_RESET_LAND_CR_LP",
-  "RESET_LAND",
-  "RESET_LAND_D_5F",
-  "RESET_LAND_D_HOLD",
-  "RESET_LAND_U_HOLD",
-  "RESET_LAND_B_HOLD",
+
+  "SAPPO_EX_8F_TENKO_EX_RESET_0F_STAND",
+  "SAPPO_EX_8F_TENKO_EX_RESET_1F_STAND",
+  "SAPPO_EX_8F_TENKO_EX_RESET_2F_STAND",
+  "SAPPO_EX_8F_TENKO_EX_RESET_0F_CROUCH",
+  "SAPPO_EX_8F_TENKO_EX_RESET_1F_CROUCH",
+  "SAPPO_EX_8F_TENKO_EX_RESET_5F_CROUCH",
+  "SAPPO_EX_8F_TENKO_EX_RESET_6F_CROUCH",
+  "SAPPO_EX_8F_TENKO_EX_RESET_0F_FORWARD",
+  "SAPPO_EX_8F_TENKO_EX_RESET_1F_FORWARD",
   ],
   [
   "AIR_THROW_ODD",
@@ -729,11 +730,17 @@ var JSONS = [
   "2HK_VS_1HK",
   "NASH_VT",
   "LAURA_VR_KD",
-  "DHALSIM_8HP_HIT",
-  "DHALSIM_8HP_CH",
-  "DHALSIM_8HP_BLK",
   "JUMP_CANCEL_2F",
   "JUMP_CANCEL_4F",
+  "THROW_VS_JUMP_LAND",
+  "THROW_VS_RESET_FRAME_1_2",
+  "THROW_VS_RESET_FRAME_3_4",
+  "THROW_VS_RESET_LAND_CR_LP",
+  "RESET_LAND",
+  "RESET_LAND_D_5F",
+  "RESET_LAND_D_HOLD",
+  "RESET_LAND_U_HOLD",
+  "RESET_LAND_B_HOLD",  
   ],
   [
   "KARIN_VS_LAURA_ROUND_1",
@@ -753,7 +760,10 @@ var JSONS = [
   "CHUNLI_SBK_MK_DASH_6HK",
   "BACKDASH_INPUT_MAX",
   "RYU_SHORYUKEN_INPUT_MAX",
-  "RYU_8LK_VS_NASH_2MP",
+  "RYU_8LK_VS_NASH_2MP",  
+  "DHALSIM_8HP_HIT",
+  "DHALSIM_8HP_CH",
+  "DHALSIM_8HP_BLK",
   "CHUNLI_AIRLEG_LK",
   "CHUNLI_AIRLEG_MK",
   "CHUNLI_AIRLEG_HK",
@@ -768,6 +778,7 @@ d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("cla
     UCREPLAY(data,d);
   });
   if (d3.event.ctrlKey && window.location.hash.startsWith("#")) window.location.hash+="/"+d;
+  else if (d3.event.shiftKey) window.location.hash="#"+d;
 })
 
 //d3.json("REPLAY_TENKO_OROCHI.json",UCREPLAY);
