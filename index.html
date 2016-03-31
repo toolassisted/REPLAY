@@ -606,7 +606,7 @@ function UCREPLAY(data,file) {
             .attr("height", function(d) { return +d.rh; })
             .attr("width", function(d) { return +d.rw; });
 
-          dg.append("line").attr("x1",fp.x2).attr("x2",fp.x2).attr("y1",0.1).attr("y2",0).attr("stroke-width","1").attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"));
+          dg.append("line").attr("x1",fp.x2+xoff).attr("x2",fp.x2+xoff).attr("y1",0.1).attr("y2",0).attr("stroke-width","1").attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"));
 
 
           // if (ff==f)
