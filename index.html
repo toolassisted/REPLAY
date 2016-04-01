@@ -608,6 +608,8 @@ function UCREPLAY(data,file) {
 
           dg.append("line").attr("x1",fp.x2+xoff).attr("x2",fp.x2+xoff).attr("y1",0.1).attr("y2",0).attr("stroke-width","1").attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"));
 
+          dg.append("line").attr("x1",fp.x1+xoff).attr("x2",fp.x1+xoff).attr("y1",0.1).attr("y2",0).attr("stroke-width","1").attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"));
+
 
           // if (ff==f)
           // dg.selectAll("rect.hits").data(fp.hits).enter().append("rect")
@@ -821,6 +823,9 @@ var JSONS = [
   "LAURA_VS_CHUN_RIGHT",
   "LAURA_VS_KARIN_LEFT",
   "LAURA_VS_KARIN_RIGHT",
+
+  "RMIKA_CA_LEFT",
+  "RMIKA_CA_RIGHT",
   ],  ];
 
 d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("class","COL")
