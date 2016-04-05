@@ -288,9 +288,16 @@ function UCREPLAY(data,file) {
       d3.select(this).text(d + "." + 1).classed("first",true);
       var r = this.parentNode; 
       var rc = 2;
-      while (r.nextSibling != null) {
-        r = r.nextSibling;
-        d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+      if (d3.event.ctrlKey) {
+        while (r.previousSibling != null && r.previousSibling.previousSibling != null && r.previousSibling.previousSibling.previousSibling != null) {
+          r = r.previousSibling;
+          d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+        }
+      } else {
+        while (r.nextSibling != null) {
+          r = r.nextSibling;
+          d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+        }
       }
     });
     var p1c = "";
@@ -862,6 +869,13 @@ var JSONS = [
   "RMIKA_CA_RIGHT",
 
   "ALEX_DASH_ELBOW_EX",
+
+  "ALEX_DASH_ELBOW_EX_5_3_1",
+  "ALEX_DASH_ELBOW_EX_5_4_2",
+  "ALEX_DASH_ELBOW_EX_6_4_2",
+  "ALEX_DASH_ELBOW_EX_9_7_5",
+  "ALEX_DASH_ELBOW_EX_10_8_6",
+
   ],  ];
 
 d3.select("#LINKS").selectAll("div").data(JSONS).enter().append("div").attr("class","COL")
