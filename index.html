@@ -113,6 +113,10 @@
     white-space: nowrap;
   }
 
+  table.FRAMES tr:hover {
+    background-color: #030;
+  }
+
   #LINKS div.COL {
     display: inline-block;
     vertical-align: top;
@@ -586,8 +590,8 @@ function UCREPLAY(data,file) {
       rg.selectAll("*").remove();
 
       var xoff = 0;
-      if (frame.p[0].x1 > 4 && frame.p[1].x1 > 4) xoff = -5;
-      if (frame.p[0].x1 < -4 && frame.p[1].x1 < -4) xoff = +5;
+      if (frame.p[0].x3 > 4 && frame.p[1].x3 > 4) xoff = -5;
+      if (frame.p[0].x3 < -4 && frame.p[1].x3 < -4) xoff = +5;
 
       // for (var ff=f-10;ff<=f;ff++) {
 
@@ -723,6 +727,25 @@ var JSONS = [
   "KARIN_2MK_TENKO_1",
   "KARIN_2MK_TENKO_2",
   "KARIN_2MK_TENKO_3",
+
+
+  "ALEX_PARRY_KEN_5LP",
+  "ALEX_PARRY_KEN_5MP",
+  "ALEX_PARRY_KEN_5HP",
+  "ALEX_PARRY_KEN_5LK",
+  "ALEX_PARRY_KEN_5MK",
+  "ALEX_PARRY_KEN_5HK",
+  "ALEX_PARRY_KEN_2LP",
+  "ALEX_PARRY_KEN_2MP",
+  "ALEX_PARRY_KEN_2HP",
+  "ALEX_PARRY_KEN_2LK",
+  "ALEX_PARRY_KEN_2MK",
+  "ALEX_PARRY_KEN_2HK",
+  
+  "ALEX_PARRY_NASH_FAR_7",
+  "ALEX_PARRY_NASH_NEAR_6",
+
+
   ],
   // [
 
@@ -798,18 +821,6 @@ var JSONS = [
   "KEN_VT_4MPHP_TATSU_MK_3F",
   "KEN_VT_4MPHP_TATSU_MK_CHUNLI",
 
-  "ALEX_PARRY_KEN_5LP",
-  "ALEX_PARRY_KEN_5MP",
-  "ALEX_PARRY_KEN_5HP",
-  "ALEX_PARRY_KEN_5LK",
-  "ALEX_PARRY_KEN_5MK",
-  "ALEX_PARRY_KEN_5HK",
-  "ALEX_PARRY_KEN_2LP",
-  "ALEX_PARRY_KEN_2MP",
-  "ALEX_PARRY_KEN_2HP",
-  "ALEX_PARRY_KEN_2LK",
-  "ALEX_PARRY_KEN_2MK",
-  "ALEX_PARRY_KEN_2HK",
   ],
   [
   "AIR_THROW_ODD",
