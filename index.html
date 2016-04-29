@@ -45,6 +45,8 @@
   .p1hit { stroke: #c6f; }
   .p1cyan { stroke: #0ff; }
   .p1yellow { stroke: #ff0; }
+  .p1orange { stroke: #fc0; }
+  .p1redorange { stroke: #f60; }
 
   .p2gray { stroke: #333; }
   .p2red { stroke: #f66; }
@@ -52,6 +54,9 @@
   .p2blue { stroke: #66f; }
   .p2hit { stroke: #c6f; }
   .p2cyan { stroke: #6ff; }
+  .p2orange { stroke: #fc3; }
+  .p2redorange { stroke: #f63; }
+
 
   .hitbox { color: #f99; }
   .hit { color: #969; }
@@ -626,7 +631,7 @@ function UCREPLAY(data,file) {
 
           // if (ff==f)
           dg.selectAll("rect.hurts").data(fp.hurts).enter().append("rect")
-            .attr("class", "p" + (p+1) + (fp.hit==0?"blue":"hit"))
+            .attr("class", function(d) { return "p" + (p+1) + (fp.hit!=0?"hit": d.t==1?"orange":"blue");})
             .attr("x", function(d) { return +d.rx+xoff; })
             .attr("y", function(d) { return -d.ry-d.rh; })
             .attr("height", function(d) { return +d.rh; })
@@ -657,7 +662,7 @@ function UCREPLAY(data,file) {
               if (p==0) { t1.text(t1.text() + " . " + pp[pi].s); }
               if (p==1) { t2.text(t2.text() + " . " + pp[pi].s); }
               dg.selectAll("rect.phits").data(pp[pi].hits).enter().append("rect")
-                .attr("class", "p" + (p+1) + "red")
+                .attr("class", "p" + (p+1) + "redorange")
                 .attr("x", function(d) { return +d.rx+xoff; })
                 .attr("y", function(d) { return -d.ry-d.rh; })
                 .attr("height", function(d) { return +d.rh; })
@@ -820,6 +825,11 @@ var JSONS = [
   "KEN_VT_4MPHP_TATSU_MK_2F",
   "KEN_VT_4MPHP_TATSU_MK_3F",
   "KEN_VT_4MPHP_TATSU_MK_CHUNLI",
+
+  "GUILE_FK_LK",
+  "GUILE_FK_MK",
+  "GUILE_FK_HK",
+  "GUILE_FK_EX",
 
   ],
   [
