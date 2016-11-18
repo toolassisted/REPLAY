@@ -298,18 +298,21 @@ function UCREPLAY(data,file) {
   for (var f=0;f<frames.length;f++) {
     var TR = FRAMETABLE.append("tr");
     TR.append("td").text(f).datum(f).on("click",function(d,i){
-      d3.select(this).text(d + "." + 1).classed("first",true);
+      // d3.select(this).text(d + "." + 1).classed("first",true);
+      d3.select(this).text(1).classed("first",true);
       var r = this.parentNode; 
       var rc = 2;
       if (d3.event.ctrlKey) {
         while (r.previousSibling != null && r.previousSibling.previousSibling != null && r.previousSibling.previousSibling.previousSibling != null) {
           r = r.previousSibling;
-          d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+          // d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+          d3.select(r.children[0]).text(function(rd,ri) { return rc++; }).classed("first",false);;
         }
       } else {
         while (r.nextSibling != null) {
           r = r.nextSibling;
-          d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+          // d3.select(r.children[0]).text(function(rd,ri) { return rd + "." + rc++; }).classed("first",false);;
+          d3.select(r.children[0]).text(function(rd,ri) { return rc++; }).classed("first",false);;
         }
       }
     });
@@ -1122,6 +1125,15 @@ var JSONS = [
 
   "ZANGIEF_PARRY",
   "JURI_9HK_CROSS_LAND",
+  
+  "CHUNLI_AIR_LEG_LK",
+  "CHUNLI_AIR_LEG_MK",
+  "CHUNLI_AIR_LEG_HK",
+  "CHUNLI_AIR_LEG_EX",
+  "CHUNLI_VT_AIR_LEG_LK",
+  "CHUNLI_VT_AIR_LEG_MK",
+  "CHUNLI_VT_AIR_LEG_HK",
+  "CHUNLI_VT_AIR_LEG_EX",
   
   ],  ];
 
